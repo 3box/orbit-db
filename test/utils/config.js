@@ -4,7 +4,7 @@ module.exports = {
   defaultIpfsConfig: {
     start: true,
     EXPERIMENTAL: {
-      pubsub: true
+        pubsub: true
     },
     config: {
       Addresses: {
@@ -26,7 +26,7 @@ module.exports = {
   },
   daemon1: {
     EXPERIMENTAL: {
-      pubsub: true
+        pubsub: true
     },
     config: {
       Addresses: {
@@ -48,7 +48,7 @@ module.exports = {
   },
   daemon2: {
     EXPERIMENTAL: {
-      pubsub: true
+        pubsub: true
     },
     config: {
       Addresses: {

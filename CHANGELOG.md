@@ -1,5 +1,85 @@
 # Changelog
 
+Note: OrbitDB follows [semver](https://semver.org/). We are currently in alpha: backwards-incompatible changes may occur in minor releases.
+
+## v0.23.0
+
+### Performance Improvements
+  Performance improvements have been made to both writing and loading.
+
+  Our benchmarks show an increase of 2-3x loading and writing speeds! :tada:
+
+```
+  v0.22.0
+  Starting IPFS...
+  DB entries: 1000
+  Writing DB...
+  writing took 3586 ms
+  Loading DB...
+  load took 1777 ms
+
+  v0.23.0
+  Starting IPFS...
+  DB entries: 1000
+  Writing DB...
+  writing took 1434 ms
+  Loading DB...
+  load took 802 ms
+
+  // Writing improved: ~2.5x
+  // Loading improved: ~2.2x
+```
+The speed-up between the versions is more pronounced as the size of the database increases:
+```
+  v0.22.0
+  Starting IPFS...
+  DB entries: 10000
+  Writing DB...
+  writing took 31292 ms
+  Loading DB...
+  load took 26812 ms
+
+  v0.23.0
+  Starting IPFS...
+  DB entries: 10000
+  Writing DB...
+  writing took 10383 ms
+  Loading DB...
+  load took 5542 ms
+
+  // Writing improved: ~3x
+  // Loading improved: ~4.8x
+  ```
+
+To try out the benchmarks for yourself run `node benchmarks/benchmark-load.js`
+
+### Entry references
+Each entry added now contains references to previous entries in powers of 2 distance apart up to a maximum distance of `referenceCount` (default 32) from it, speeding up both writing and loading and resulting in smaller entry sizes. [#275](https://github.com/orbitdb/ipfs-log/pull/275)
+
+### Signature Caching
+The default keystore and identity-provider now have caches added to speed up verification of entry signtures and identities. See [#53](https://github.com/orbitdb/orbit-db-identity-provider/pull/53) and [#38](https://github.com/orbitdb/orbit-db-keystore/pull/38)
+
+### Offline mode
+An optional `offline` flag has bee added which, when set to `true`, prevents pubsub from starting and messages from being exchanged. This is useful to speed up testing and for when you would like to use your database locally without networking enabled.
+To use offline mode, start your IPFS nodes offline (with `new IPFS({ start: false })`) and create your OrbitDB instance as follows:
+
+```js
+const orbitdb = await OrbitDB.createInstance(ipfs, { offline: true, id: 'mylocalid' })
+```
+
+Note that an `id` will need to be passed if your IPFS node is offline. If you would like to start replicating databases after starting OrbitDB in offline mode, the OrbitDB instance needs to be re-created. See [#726](https://github.com/orbitdb/orbit-db/pull/726)
+
+### Pinning and Garbage Collection
+
+OrbitDB does **not** automatically pin content added to IPFS. This means that if garbage collection is triggered, any unpinned content will be erased. An optional `pin` flag has been added which, when set to `true`, will pin the content to IPFS and can be set as follows:
+
+```js
+await db.put('name', 'hello', { pin: true })
+```
+Note that this is currently _experimental_ and will degrade performance. For more info see [this issue](https://github.com/ipfs/js-ipfs/issues/2650).
+
+It is recommended that you collect the hashes of the entries and pin them outside of the `db.put/add` calls before triggering garbage collection.
+
 ## v0.22.1
 
  - Thanks to [#712](https://github.com/orbitdb/orbit-db/pull/712) from @kolessios, as well as the efforts of @BartKnucle and @durac :heart:, OrbitDB now works on Windows :tada: We invite our Windows friends to try it out!

@@ -4,7 +4,7 @@
   <img src="images/orbit_db_logo_color.jpg" width="256" />
 </p>
 
-[![Gitter](https://img.shields.io/gitter/room/nwjs/nw.js.svg)](https://gitter.im/orbitdb/Lobby) [![Matrix](https://img.shields.io/badge/matrix-%23orbitdb%3Apermaweb.io-blue.svg)](https://riot.permaweb.io/#/room/#orbitdb:permaweb.io) [![Discord](https://img.shields.io/discord/475789330380488707?color=blueviolet&label=discord)](https://discord.gg/cscuf5T) [![CircleCI Status](https://circleci.com/gh/orbitdb/orbit-db.svg?style=shield)](https://circleci.com/gh/orbitdb/orbit-db) [![npm version](https://badge.fury.io/js/orbit-db.svg)](https://www.npmjs.com/package/orbit-db) [![node](https://img.shields.io/node/v/orbit-db.svg)](https://www.npmjs.com/package/orbit-db)
+[![Gitter](https://img.shields.io/gitter/room/nwjs/nw.js.svg)](https://gitter.im/orbitdb/Lobby) [![Matrix](https://img.shields.io/badge/matrix-%23orbitdb%3Apermaweb.io-blue.svg)](https://riot.permaweb.io/#/room/#orbitdb:permaweb.io) [![Discord](https://img.shields.io/discord/475789330380488707?color=blueviolet&label=discord)](https://discord.gg/v3RNE3M) [![CircleCI Status](https://circleci.com/gh/orbitdb/orbit-db.svg?style=shield)](https://circleci.com/gh/orbitdb/orbit-db) [![npm version](https://badge.fury.io/js/orbit-db.svg)](https://www.npmjs.com/package/orbit-db) [![node](https://img.shields.io/node/v/orbit-db.svg)](https://www.npmjs.com/package/orbit-db)
 
 OrbitDB is a **serverless, distributed, peer-to-peer database**. OrbitDB uses [IPFS](https://ipfs.io) as its data storage and [IPFS Pubsub](https://github.com/ipfs/go-ipfs/blob/master/core/commands/pubsub.go#L23) to automatically sync databases with peers. It's an eventually consistent database that uses [CRDTs](https://en.wikipedia.org/wiki/Conflict-free_replicated_data_type) for conflict-free database merges making OrbitDB an excellent choice for decentralized apps (dApps), blockchain applications and offline-first web applications.
 
@@ -47,6 +47,7 @@ We also have regular community calls, which we announce in the issues in [the @o
   * [Install dependencies](#install-dependencies)
   * [Browser example](#browser-example)
   * [Node.js example](#nodejs-example)
+  * [Workshop](#workshop)
 - [Packages](#packages)
   * [OrbitDB Store Packages](#orbitdb-store-packages)
 - [Development](#development)
@@ -55,6 +56,7 @@ We also have regular community calls, which we announce in the issues in [the @o
   * [Benchmark](#benchmark)
   * [Logging](#logging)
 - [Frequently Asked Questions](#frequently-asked-questions)
+  * [Are there implementations in other languages?](#are-there-implementations-in-other-languages)
 - [Contributing](#contributing)
 - [Sponsors](#sponsors)
 - [License](#license)
@@ -79,7 +81,7 @@ npm install orbit-db-cli -g
 
 ### Module with IPFS Instance
 
-If you're using `orbitd-db` to develop **browser** or **Node.js** applications, use it as a module with the javascript instance of IPFS
+If you're using `orbit-db` to develop **browser** or **Node.js** applications, use it as a module with the javascript instance of IPFS
 
 Install dependencies:
 
@@ -90,17 +92,18 @@ npm install orbit-db ipfs
 ```javascript
 const IPFS = require('ipfs')
 const OrbitDB = require('orbit-db')
-// OrbitDB uses Pubsub which is an experimental feature
-// and need to be turned on manually.
-// Note that these options need to be passed to IPFS in
-// all examples even if not specified so.
+
+// Create IPFS instance
+
+// For js-ipfs >= 0.38
+const ipfs = new IPFS()
+
+// For js-ipfs < 0.38
 const ipfsOptions = {
   EXPERIMENTAL: {
     pubsub: true
   }
 }
-
-// Create IPFS instance
 const ipfs = new IPFS(ipfsOptions)
 
 ipfs.on('error', (e) => console.error(e))
@@ -209,6 +212,10 @@ See the code in [examples/eventlog.js](https://github.com/orbitdb/orbit-db/blob/
 node examples/eventlog.js
 ```
 
+### Workshop
+
+We have a field manual which has much more detailed examples and a run-through of how to understand OrbitDB, at [orbitdb/field-manual](https://github.com/orbitdb/field-manual). There is also a workshop you can follow, which shows how to build an app, at [orbit-db/web3-workshop](https://github.com/orbitdb/web3-workshop).
+
 More examples at [examples](https://github.com/orbitdb/orbit-db/tree/master/examples).
 
 ## Packages
@@ -267,6 +274,15 @@ LOG=debug node <file>
 
 We have an FAQ! [Go take a look at it](FAQ.md). If a question isn't there, open an issue and suggest adding it. We can work on the best answer together.
 
+### Are there implementations in other languages?
+
+Yes! Take a look at these implementations:
+
+  - Golang: [berty/go-orbit-db](https://github.com/berty/go-orbit-db)
+  - Python: [orbitdb/py-orbit-db-http-client](https://github.com/orbitdb/py-orbit-db-http-client)
+
+The best place to find out what is out there and what is being actively worked on is likely by asking in the [Gitter](https://gitter.im/orbitdb/Lobby). If you know of any other repos that ought to be included in this section, please open a PR and add them.
+
 ## Contributing
 
 **Take a look at our organization-wide [Contributing Guide](https://github.com/orbitdb/welcome/blob/master/contributing.md).** You'll find most of your questions answered there. Some questions may be answered in the [FAQ](FAQ.md), as well.
@@ -287,7 +303,7 @@ The development of OrbitDB has been sponsored by:
 * [Protocol Labs](https://protocol.ai/)
 * [Maintainer Mountaineer](https://maintainer.io)
 
-If you want to sponsor developers to work on OrbitDB, please reach out to @haadcode.
+If you want to sponsor developers to work on OrbitDB, please reach out to [@haadcode](https://github.com/haadcode).
 
 ## License
 
